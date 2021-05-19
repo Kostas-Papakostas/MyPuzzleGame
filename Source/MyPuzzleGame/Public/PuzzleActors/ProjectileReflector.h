@@ -22,5 +22,21 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Mesh Components"))
+		UStaticMeshComponent* mainBody;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Mesh Components"))
+		UStaticMeshComponent* bounceArea;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Mesh Components"))
+		UMaterial* bounceAreaMaterial;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Mesh Components"))
+		UMaterial* mainBodyMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Child Actor"))
+		UChildActorComponent* reflector;
+
 	
 };

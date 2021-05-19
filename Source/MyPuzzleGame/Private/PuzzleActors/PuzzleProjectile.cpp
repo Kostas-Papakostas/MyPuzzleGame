@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PuzzleProjectile.h"
+#include "MainReflector.h"
+#include "Components/StaticMeshComponent.h"
 #include "Engine/Engine.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "GameFramework/ProjectileMovementComponent.h"
@@ -30,6 +32,10 @@ APuzzleProjectile::APuzzleProjectile()
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bShouldBounce = true;
 
+	sphereMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Projectile Mesh"));
+	sphereMesh->SetRelativeScale3D(FVector(0.1, 0.1, 0.1));
+	sphereMesh->SetupAttachment(RootComponent);
+
 	// Die after 3 seconds by default
 	InitialLifeSpan = 0.0f;
 }
@@ -37,19 +43,32 @@ APuzzleProjectile::APuzzleProjectile()
 void APuzzleProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	UWorld* const World = GetWorld();
-	// Only add impulse and destroy projectile if we hit a physics
-	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
-	{
-		castOrigin = Hit.ImpactPoint;
-		//castDirection = GetVelocity().MirrorByVector(Hit.ImpactNormal);
-		castDirection = GetActorForwardVector().MirrorByVector(Hit.ImpactNormal).GetSafeNormal();
-
-		OtherComp->AddImpulseAtLocation(castDirection * ProjectileMovement->MaxSpeed, GetActorLocation());
-
-		castDirection = GetVelocity().MirrorByVector(Hit.ImpactNormal);
-
-		//OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
-
+	if ((OtherActor != NULL) && (OtherActor != this) &&(OtherComp!=NULL)) {
+		AMainReflector* tempR = Cast<AMainReflector>(OtherActor);
+		if (!tempR)
+			this->Destroy();
 	}
+
+	//COMMENTED OUT WE MAY NOT NEED9 PHYSICS HERE
+	// Only add impulse and destroy projectile if we hit a physics
+	//if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp!=NULL) && OtherComp->IsSimulatingPhysics())
+	//{
+	//	AMainReflector* tempR = Cast<AMainReflector>(OtherActor);
+	//	if (tempR) {
+	//		castOrigin = Hit.ImpactPoint;
+	//		//castDirection = GetVelocity().MirrorByVector(Hit.ImpactNormal);
+	//		castDirection = GetActorForwardVector().MirrorByVector(Hit.ImpactNormal).GetSafeNormal();
+
+	//		OtherComp->AddImpulseAtLocation(castDirection * ProjectileMovement->MaxSpeed, GetActorLocation());
+
+	//		castDirection = GetVelocity().MirrorByVector(Hit.ImpactNormal);
+
+	//		//OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
+	//	}
+	//	else
+	//		this->Destroy();
+	//}
 }
+
+
 

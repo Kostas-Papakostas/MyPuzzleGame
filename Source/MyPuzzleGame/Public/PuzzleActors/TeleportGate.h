@@ -23,6 +23,19 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	/** Sphere collision component */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Teleporter)
+		class UBoxComponent* overlapComponent;
 	
-	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Mesh)
+		UStaticMeshComponent* vortexMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Mesh)
+		UStaticMeshComponent* frameMesh;
+
+	UFUNCTION()
+		void OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UPROPERTY(BlueprintReadOnly, Category = DebugFields)
+		bool teleported = false;
 };

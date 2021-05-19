@@ -41,6 +41,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category=ProjectilesAttributes)
 		FVector castDirection;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
+		UStaticMeshComponent* sphereMesh;
+
 	/** Returns CollisionComp subobject **/
 	FORCEINLINE class USphereComponent* GetCollisionComp() const { return CollisionComp; }
 	/** Returns ProjectileMovement subobject **/
@@ -49,4 +52,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MainAttributes)
 		TEnumAsByte<EProjectilesColors> color;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MainAttributes)
+		TArray<UMaterialInterface*> colorsArray;
 };

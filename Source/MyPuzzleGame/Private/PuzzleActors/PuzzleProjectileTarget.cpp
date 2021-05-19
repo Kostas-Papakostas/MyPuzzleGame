@@ -54,7 +54,9 @@ void APuzzleProjectileTarget::OnHit(UPrimitiveComponent * HitComp, AActor * Othe
 				//increment A global Variable indicating progress
 				TArray<AActor*> FoundActors;
 				UGameplayStatics::GetAllActorsOfClass(World, AMainGate::StaticClass(), FoundActors);
-				Cast<AMainGate>(FoundActors.operator[](0))->keysGathered++;
+				if (FoundActors.Num()>0) {
+					Cast<AMainGate>(FoundActors.operator[](0))->keysGathered++;
+				}
 				noMoreKeys = !noMoreKeys;
 				OtherActor->Destroy();
 			}
