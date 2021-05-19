@@ -28,16 +28,20 @@ AMyPuzzleGameProjectile::AMyPuzzleGameProjectile()
 	ProjectileMovement->bShouldBounce = true;
 
 	// Die after 3 seconds by default
-	InitialLifeSpan = 3.0f;
+	InitialLifeSpan = 0.0f;
 }
 
 void AMyPuzzleGameProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	FVector castOrigin;
+	FVector castDirection;
 	// Only add impulse and destroy projectile if we hit a physics
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
 	{
-		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
+		castOrigin = Hit.ImpactPoint;
+		castDirection = GetVelocity().MirrorByVector(Hit.ImpactNormal);
+		OtherComp->AddImpulseAtLocation(castDirection * 100.0f, GetActorLocation());
 
-		Destroy();
+		//Destroy();
 	}
 }

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "PuzzleActors/PuzzleProjectile.h"
 #include "MyPuzzleGameCharacter.generated.h"
 
 class UInputComponent;
@@ -66,7 +67,7 @@ public:
 
 	/** Projectile class to spawn */
 	UPROPERTY(EditDefaultsOnly, Category=Projectile)
-	TSubclassOf<class AMyPuzzleGameProjectile> ProjectileClass;
+	TSubclassOf<class APuzzleProjectile> ProjectileClass;
 
 	/** Sound to play each time we fire */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)

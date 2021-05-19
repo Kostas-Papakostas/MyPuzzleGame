@@ -2,6 +2,8 @@
 
 #include "MyPuzzleGameCharacter.h"
 #include "MyPuzzleGameProjectile.h"
+#include "PuzzleProjectile.h"
+#include "Engine/Engine.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -150,7 +152,7 @@ void AMyPuzzleGameCharacter::OnFire()
 			{
 				const FRotator SpawnRotation = VR_MuzzleLocation->GetComponentRotation();
 				const FVector SpawnLocation = VR_MuzzleLocation->GetComponentLocation();
-				World->SpawnActor<AMyPuzzleGameProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
+				World->SpawnActor<APuzzleProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
 			}
 			else
 			{
@@ -163,10 +165,21 @@ void AMyPuzzleGameCharacter::OnFire()
 				ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 
 				// spawn the projectile at the muzzle
-				World->SpawnActor<AMyPuzzleGameProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+				APuzzleProjectile* tempP = World->SpawnActor<APuzzleProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+				if (tempP) {
+					if (GEngine)
+						GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Red, TEXT("SPAWNED"));
+				}
+				else {
+					if (GEngine)
+						GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Red, TEXT("ERROR"));
+				}
 			}
 		}
-	}
+	}else
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Yellow, TEXT("ERROR"));
+
 
 	// try and play the sound if specified
 	if (FireSound != NULL)

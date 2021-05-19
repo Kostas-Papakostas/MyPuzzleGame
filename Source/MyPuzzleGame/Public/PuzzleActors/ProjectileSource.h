@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "ProjectileReflector.generated.h"
+#include "ProjectileSource.generated.h"
 
 UCLASS()
-class MYPUZZLEGAME_API AProjectileReflector : public AActor
+class MYPUZZLEGAME_API AProjectileSource : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AProjectileReflector();
+	AProjectileSource();
 
 protected:
 	// Called when the game starts or when spawned
@@ -22,5 +22,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	
 	
 };

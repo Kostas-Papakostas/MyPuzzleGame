@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PuzzleProjectile.h"
+#include "Engine/Engine.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 
@@ -29,17 +31,25 @@ APuzzleProjectile::APuzzleProjectile()
 	ProjectileMovement->bShouldBounce = true;
 
 	// Die after 3 seconds by default
-	InitialLifeSpan = 3.0f;
+	InitialLifeSpan = 0.0f;
 }
 
 void APuzzleProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	UWorld* const World = GetWorld();
 	// Only add impulse and destroy projectile if we hit a physics
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())
 	{
-		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
+		castOrigin = Hit.ImpactPoint;
+		//castDirection = GetVelocity().MirrorByVector(Hit.ImpactNormal);
+		castDirection = GetActorForwardVector().MirrorByVector(Hit.ImpactNormal).GetSafeNormal();
 
-		Destroy();
+		OtherComp->AddImpulseAtLocation(castDirection * ProjectileMovement->MaxSpeed, GetActorLocation());
+
+		castDirection = GetVelocity().MirrorByVector(Hit.ImpactNormal);
+
+		//OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
+
 	}
 }
 

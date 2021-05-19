@@ -35,6 +35,11 @@ public:
 	/** called when projectile hits something */
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+	
+	UPROPERTY(BlueprintReadWrite, Category=ProjectilesAttributes)
+		FVector castOrigin;
+	UPROPERTY(BlueprintReadWrite, Category=ProjectilesAttributes)
+		FVector castDirection;
 
 	/** Returns CollisionComp subobject **/
 	FORCEINLINE class USphereComponent* GetCollisionComp() const { return CollisionComp; }
