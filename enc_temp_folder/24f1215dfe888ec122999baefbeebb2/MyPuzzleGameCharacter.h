@@ -52,7 +52,6 @@ class AMyPuzzleGameCharacter : public ACharacter
 	class UMotionControllerComponent* L_MotionController;
 
 	bool GravityGunOn;
-	bool bRotateLeft, bRotateRight;
 	FHitResult Hit;
 	FCollisionQueryParams TraceParams;
 
@@ -124,10 +123,6 @@ protected:
 	void MoveRight(float Val);
 
 	void UseGravityGun();
-
-	void RotateLeft();
-
-	void RotateRight();
 
 	/**
 	 * Called via input to turn at a given rate.

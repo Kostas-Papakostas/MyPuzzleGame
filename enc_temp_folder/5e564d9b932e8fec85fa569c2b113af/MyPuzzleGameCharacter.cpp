@@ -29,8 +29,6 @@ AMyPuzzleGameCharacter::AMyPuzzleGameCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	GravityGunOn = false;
-	bRotateLeft = false;
-	bRotateRight = false;
 
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
@@ -68,7 +66,7 @@ AMyPuzzleGameCharacter::AMyPuzzleGameCharacter()
 
 	GG_MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("CarryObjectLocation"));
 	GG_MuzzleLocation->SetupAttachment(FP_MuzzleLocation);
-	GG_MuzzleLocation->SetRelativeLocation(FVector(0.2f, 230.0f, 32.0f));
+	GG_MuzzleLocation->SetRelativeLocation(FVector(0.2f, 48.4f, -10.6f));
 	
 	// Default offset from the character location for projectiles to spawn
 	GunOffset = FVector(100.0f, 0.0f, 10.0f);
@@ -129,17 +127,10 @@ void AMyPuzzleGameCharacter::Tick(float DeltaTime)
 		if (reflectorActor) {
 			DrawDebugPoint(GetWorld(), Hit.ImpactPoint, 5.0f, FColor::Red, true);
 			reflectorActor->overallBox->SetSimulatePhysics(false);
-			reflectorActor->AttachToComponent(GG_MuzzleLocation, FAttachmentTransformRules::FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, false));
+			reflectorActor->AttachToComponent(FP_MuzzleLocation, FAttachmentTransformRules::FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, false));
 		}
 		else
 			GravityGunOn = false;
-	}
-
-	if (reflectorActor) {
-		if (bRotateLeft)
-			reflectorActor->AddActorWorldRotation(FRotator::FRotator(0, 1, 0));
-		else if(bRotateRight)
-			reflectorActor->AddActorWorldRotation(FRotator::FRotator(0, -1, 0));
 	}
 
 
@@ -154,14 +145,6 @@ void AMyPuzzleGameCharacter::SetupPlayerInputComponent(class UInputComponent* Pl
 	check(PlayerInputComponent);
 
 	PlayerInputComponent->BindAction("ToggleGravityGun", IE_Pressed, this, &AMyPuzzleGameCharacter::UseGravityGun);
-	
-	/*Rotate Left or stop*/
-	PlayerInputComponent->BindAction("RotateLeft", IE_Pressed, this, &AMyPuzzleGameCharacter::RotateLeft);
-	PlayerInputComponent->BindAction("RotateLeft", IE_Released, this, &AMyPuzzleGameCharacter::RotateLeft);
-	
-	/*Rotate Right or Stop*/
-	PlayerInputComponent->BindAction("RotateRight", IE_Pressed, this, &AMyPuzzleGameCharacter::RotateRight);
-	PlayerInputComponent->BindAction("RotateRight", IE_Released, this, &AMyPuzzleGameCharacter::RotateRight);
 
 	// Bind jump events
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
@@ -350,23 +333,6 @@ void AMyPuzzleGameCharacter::UseGravityGun()
 		reflectorActor = NULL;
 	}
 }
-
-void AMyPuzzleGameCharacter::RotateLeft()
-{
-	if (bRotateLeft)
-		bRotateLeft = false;
-	else
-		bRotateLeft = true;
-}
-
-void AMyPuzzleGameCharacter::RotateRight()
-{
-	if (bRotateRight)
-		bRotateRight = false;
-	else
-		bRotateRight = true;
-}
-
 
 void AMyPuzzleGameCharacter::TurnAtRate(float Rate)
 {

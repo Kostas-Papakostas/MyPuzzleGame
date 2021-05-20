@@ -4,6 +4,7 @@
 #include "Components/StaticMeshComponent.h"
 
 
+
 // Sets default values
 AMainReflector::AMainReflector()
 {
@@ -20,7 +21,7 @@ AMainReflector::AMainReflector()
 void AMainReflector::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	mainMesh->SetMaterial(0, mainMeshMat);
 }
 
 // Called every frame

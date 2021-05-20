@@ -11,11 +11,11 @@ ATeleportExit::ATeleportExit()
 
 	frameMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Frame"));
 	frameMesh->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
-	frameMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	frameMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 
 	vortexMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Vortex"));
 	vortexMesh->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
-	vortexMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	vortexMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 
 }
 

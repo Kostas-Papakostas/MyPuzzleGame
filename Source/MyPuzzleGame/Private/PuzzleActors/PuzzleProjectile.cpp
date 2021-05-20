@@ -2,6 +2,8 @@
 
 #include "PuzzleProjectile.h"
 #include "MainReflector.h"
+#include "TeleportGate.h"
+#include "TeleportExit.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/Engine.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -45,7 +47,10 @@ void APuzzleProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 	UWorld* const World = GetWorld();
 	if ((OtherActor != NULL) && (OtherActor != this) &&(OtherComp!=NULL)) {
 		AMainReflector* tempR = Cast<AMainReflector>(OtherActor);
-		if (!tempR)
+		ATeleportGate* tempGate = Cast<ATeleportGate>(OtherActor);
+		ATeleportExit* tempExit = Cast<ATeleportExit>(OtherActor);
+
+		if (!tempR && !tempExit && !tempGate)//if projectile hits none of them then destroy
 			this->Destroy();
 	}
 

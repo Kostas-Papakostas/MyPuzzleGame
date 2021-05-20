@@ -24,6 +24,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Mesh Components"))
+		UMaterial* mainMeshMat;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Mesh Components"))
 		UStaticMeshComponent* mainMesh;
+
 	
 };

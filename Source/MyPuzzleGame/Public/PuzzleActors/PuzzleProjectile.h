@@ -32,6 +32,9 @@ class MYPUZZLEGAME_API APuzzleProjectile : public AActor
 public:
 	APuzzleProjectile();
 
+	UFUNCTION()
+		UProjectileMovementComponent* getProjectileMovement() { return ProjectileMovement; }
+
 	/** called when projectile hits something */
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);

@@ -57,13 +57,12 @@ void ATeleportGate::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* Other
 	UGameplayStatics::GetAllActorsOfClass(World, ATeleportExit::StaticClass(), exitGates);
 	APuzzleProjectile* overlappedProjectile = dynamic_cast<APuzzleProjectile*>(OtherActor);
 	FVector exitForwardVector;
-
 	if (overlappedProjectile) {
 		if (exitGates.Num() > 0) {
 			exitForwardVector = exitGates.operator[](0)->GetActorRightVector();
-						
-			overlappedProjectile->GetProjectileMovement()->Velocity = exitForwardVector.GetSafeNormal()*3000.f;
-			teleported = overlappedProjectile->TeleportTo(exitGates.operator[](0)->GetActorLocation(), overlappedProjectile->GetActorRotation());
+			FRotator rotateProjectile = UKismetMathLibrary::FindLookAtRotation(exitGates.operator[](0)->GetActorLocation()+FVector(50,50,50), exitForwardVector);
+			teleported = overlappedProjectile->TeleportTo(exitGates.operator[](0)->GetActorLocation(), rotateProjectile);
+			overlappedProjectile->getProjectileMovement()->Velocity = exitForwardVector*overlappedProjectile->getProjectileMovement()->GetMaxSpeed();
 		}
 	}
 }

@@ -29,14 +29,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Mesh Components"))
 		UStaticMeshComponent* bounceArea;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Mesh Components"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Material Components"))
 		UMaterial* bounceAreaMaterial;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Mesh Components"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Material Components"))
 		UMaterial* mainBodyMaterial;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Child Actor"))
 		UChildActorComponent* reflector;
-
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Overall Component"))
+		class UBoxComponent* overallBox;
 	
 };

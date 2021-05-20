@@ -10,13 +10,12 @@
 AProjectileReflector::AProjectileReflector()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	overallBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Overall Box"));
 	overallBox->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
 	overallBox->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
 	overallBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-	overallBox->SetConstraintMode(EDOFMode::Default);
 
 	RootComponent = overallBox;
 
@@ -44,12 +43,6 @@ void AProjectileReflector::BeginPlay()
 	Super::BeginPlay();
 	overallBox->SetSimulatePhysics(true);
 	mainBody->SetSimulatePhysics(false);
-	overallBox->BodyInstance.bLockXRotation = true;
-	overallBox->BodyInstance.bLockYRotation = true;
-	overallBox->BodyInstance.bLockZRotation = true;
-	overallBox->SetAngularDamping(5.f);
-	overallBox->SetLinearDamping(5.f);
-
 	mainBody->SetMaterial(0, mainBodyMaterial);
 	bounceArea->SetMaterial(0, bounceAreaMaterial);
 }
@@ -58,6 +51,6 @@ void AProjectileReflector::BeginPlay()
 void AProjectileReflector::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	this->SetActorRotation(FRotator::FRotator(0, this->GetActorRotation().Yaw, 0));
+
 }
 
