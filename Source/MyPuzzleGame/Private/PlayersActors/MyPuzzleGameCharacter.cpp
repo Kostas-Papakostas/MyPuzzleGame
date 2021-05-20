@@ -17,6 +17,7 @@
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
+#include "MainReflector.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
@@ -130,6 +131,14 @@ void AMyPuzzleGameCharacter::Tick(float DeltaTime)
 			DrawDebugPoint(GetWorld(), Hit.ImpactPoint, 5.0f, FColor::Red, true);
 			reflectorActor->overallBox->SetSimulatePhysics(false);
 			reflectorActor->AttachToComponent(GG_MuzzleLocation, FAttachmentTransformRules::FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, false));
+			reflectorActor->floating = true;
+			AMainReflector* tempReflector = Cast<AMainReflector>( reflectorActor->reflector->GetChildActor());
+			if (tempReflector) {
+				if (GEngine) {
+					GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Red, TEXT("I'M HERE"));
+				}
+				tempReflector->bIsFloating = true;
+			}
 		}
 		else
 			GravityGunOn = false;
@@ -345,26 +354,37 @@ void AMyPuzzleGameCharacter::UseGravityGun()
 	}
 	else {
 		GravityGunOn = false;
-		if(reflectorActor)
+		if (reflectorActor) {
 			reflectorActor->overallBox->SetSimulatePhysics(true);
+			reflectorActor->floating = false;
+			AMainReflector* tempReflector = Cast<AMainReflector>(reflectorActor->reflector->GetChildActor());
+			if (tempReflector) {
+				tempReflector->bIsFloating = false;
+			}
+			//delete tempReflector;
+		}
 		reflectorActor = NULL;
 	}
 }
 
 void AMyPuzzleGameCharacter::RotateLeft()
 {
-	if (bRotateLeft)
-		bRotateLeft = false;
-	else
-		bRotateLeft = true;
+	if (reflectorActor) {
+		if (bRotateLeft)
+			bRotateLeft = false;
+		else
+			bRotateLeft = true;
+	}
 }
 
 void AMyPuzzleGameCharacter::RotateRight()
 {
-	if (bRotateRight)
-		bRotateRight = false;
-	else
-		bRotateRight = true;
+	if (reflectorActor) {
+		if (bRotateRight)
+			bRotateRight = false;
+		else
+			bRotateRight = true;
+	}
 }
 
 

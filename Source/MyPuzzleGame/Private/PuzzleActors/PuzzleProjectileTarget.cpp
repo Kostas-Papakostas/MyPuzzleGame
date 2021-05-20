@@ -34,7 +34,10 @@ APuzzleProjectileTarget::APuzzleProjectileTarget()
 void APuzzleProjectileTarget::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	if (innerMeshMaterials.Num() >color && outerMeshMaterials.Num()>color ) {
+		outerTargetMesh->SetMaterial(0, outerMeshMaterials.operator[](color));
+		innerTargetMesh->SetMaterial(0, innerMeshMaterials.operator[](color));
+	}
 }
 
 // Called every frame
@@ -51,6 +54,7 @@ void APuzzleProjectileTarget::OnHit(UPrimitiveComponent * HitComp, AActor * Othe
 		APuzzleProjectile* tempP = Cast<APuzzleProjectile>(OtherActor);
 		if (tempP) {
 			if (tempP->color.operator==(color)&&!noMoreKeys) {
+				keys++;
 				//increment A global Variable indicating progress
 				TArray<AActor*> FoundActors;
 				UGameplayStatics::GetAllActorsOfClass(World, AMainGate::StaticClass(), FoundActors);

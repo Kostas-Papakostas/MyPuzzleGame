@@ -23,11 +23,17 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Mesh Components"))
-		UMaterial* mainMeshMat;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Mesh Components Material"))
+		UMaterialInterface* mainMeshMat;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Mesh Components Material"))
+		UMaterialInterface* mainMeshFloatingMat;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Mesh Components"))
 		UStaticMeshComponent* mainMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Component Locks"))
+		bool bIsFloating;
 
 	
 };

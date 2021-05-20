@@ -38,12 +38,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Material Components"))
 		UMaterialInterface* mainBodyMaterial;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Material Components"))
-		UMaterialInterface* bounceAreaFloatingMaterial;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Material Components"))
-		UMaterialInterface* mainBodyFloatingMaterial;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Child Actor"))
 		UChildActorComponent* reflector;
 	

@@ -62,7 +62,7 @@ void ATeleportGate::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* Other
 		if (exitGates.Num() > 0) {
 			exitForwardVector = exitGates.operator[](0)->GetActorRightVector();
 						
-			overlappedProjectile->GetProjectileMovement()->Velocity = exitForwardVector.GetSafeNormal()*3000.f;
+			overlappedProjectile->GetProjectileMovement()->Velocity = exitForwardVector.GetSafeNormal()*overlappedProjectile->GetProjectileMovement()->MaxSpeed;
 			teleported = overlappedProjectile->TeleportTo(exitGates.operator[](0)->GetActorLocation(), overlappedProjectile->GetActorRotation());
 		}
 	}

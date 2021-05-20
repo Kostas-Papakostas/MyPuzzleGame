@@ -16,6 +16,12 @@ private:
 	UPROPERTY()
 		bool noMoreKeys = false;
 
+	UPROPERTY(EditDefaultsOnly)
+		TArray<UMaterialInterface*> outerMeshMaterials;
+
+	UPROPERTY(EditDefaultsOnly)
+		TArray<UMaterialInterface*> innerMeshMaterials;
+
 public:	
 	// Sets default values for this actor's properties
 	APuzzleProjectileTarget();
@@ -39,4 +45,8 @@ public:
 	
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	UPROPERTY(BlueprintReadOnly)
+		int keys;
+
 };

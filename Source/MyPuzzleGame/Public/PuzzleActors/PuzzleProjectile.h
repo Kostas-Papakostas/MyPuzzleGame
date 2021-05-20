@@ -9,7 +9,7 @@
 
 UENUM()
 enum EProjectilesColors {
-	Red				UMETA(DisplayName = "BlueTarget"),
+	Red				UMETA(DisplayName = "RedTarget"),
 	Green			UMETA(DisplayName = "GreenTarget"),
 	Blue			UMETA(DisplayName = "BlueTarget"),
 	Yellow			UMETA(DisplayName = "YellowTarget")

@@ -4,12 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Engine/Engine.h"
+#include "PuzzleProjectile.h"
 #include "PuzzleBlocker.generated.h"
 
 UCLASS()
 class MYPUZZLEGAME_API APuzzleBlocker : public AActor
 {
 	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly)
+		UStaticMeshComponent* mainBody;
 	
 public:	
 	// Sets default values for this actor's properties

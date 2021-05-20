@@ -6,11 +6,14 @@
 #include "Components/ChildActorComponent.h"
 
 
+
 // Sets default values
 AProjectileReflector::AProjectileReflector()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	floating = false;
 
 	overallBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Overall Box"));
 	overallBox->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
@@ -59,5 +62,13 @@ void AProjectileReflector::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	this->SetActorRotation(FRotator::FRotator(0, this->GetActorRotation().Yaw, 0));
+	if (floating) {
+		mainBody->SetMaterial(0, mainBodyFloatingMaterial);
+		bounceArea->SetMaterial(0, bounceAreaFloatingMaterial);
+	}
+	else {
+		mainBody->SetMaterial(0, mainBodyMaterial);
+		bounceArea->SetMaterial(0, bounceAreaMaterial);
+	}
 }
 
