@@ -53,7 +53,11 @@ void APuzzleProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, 
 		ATeleportGate* tempGate = Cast<ATeleportGate>(OtherActor);
 		ATeleportExit* tempExit = Cast<ATeleportExit>(OtherActor);
 
-		if (!tempR && !tempExit && !tempGate)//if projectile hits none of them then destroy
+		if (GEngine) {
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, OtherActor->GetName());
+		}
+
+		if ((!tempR && !tempExit && !tempGate))//if projectile hits none of them then destroy
 			this->Destroy();
 	}
 

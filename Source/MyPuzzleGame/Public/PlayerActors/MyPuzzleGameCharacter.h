@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "PuzzleActors/PuzzleProjectile.h"
+#include "PlayerActors/PlayersProjectile.h"
 #include "ProjectileReflector.h"
 #include "MyPuzzleGameCharacter.generated.h"
 
@@ -18,10 +19,6 @@ class AMyPuzzleGameCharacter : public ACharacter
 	/** Pawn mesh: 1st person view (arms; seen only by self) */
 	UPROPERTY(VisibleDefaultsOnly, Category=Mesh)
 	class USkeletalMeshComponent* Mesh1P;
-
-	/** Gun mesh: 1st person view (seen only by self) */
-	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-	class USkeletalMeshComponent* FP_Gun;
 
 	/** Location on gun mesh where projectiles should spawn. */
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
@@ -72,11 +69,24 @@ class AMyPuzzleGameCharacter : public ACharacter
 public:
 	AMyPuzzleGameCharacter();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ray Cast Attribute")
+		float distance;
+
 protected:
 	virtual void BeginPlay();
 
 	virtual void Tick(float DeltaTime) override;
 public:
+
+	UFUNCTION(BlueprintCallable)
+		void changeMaterial();
+
+	/** Gun mesh: 1st person view (seen only by self) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
+		class USkeletalMeshComponent* FP_Gun;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
+		UMaterialInterface* FP_Gun_Mat;
 
 	UFUNCTION(BlueprintCallable)
 		bool getGravityGunOn() { return GravityGunOn; }
@@ -93,9 +103,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
 	FVector GunOffset;
 
-	/** Projectile class to spawn */
+	/**Black Projectile class to spawn */
 	UPROPERTY(EditDefaultsOnly, Category=Projectile)
-	TSubclassOf<class APuzzleProjectile> ProjectileClass;
+	TSubclassOf<class APlayersProjectile> blackProjectileClass;
+
+	/**White Projectile class to spawn */
+	UPROPERTY(EditDefaultsOnly, Category=Projectile)
+	TSubclassOf<class APlayersProjectile> whiteProjectileClass;
 
 	/** Sound to play each time we fire */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
@@ -111,8 +125,11 @@ public:
 
 protected:
 	
-	/** Fires a projectile. */
-	void OnFire();
+	/** Fires a black projectile. */
+	void OnBlackFire();
+	
+	/** Fires a white projectile. */
+	void OnWhiteFire();
 
 	/** Resets HMD orientation and position in VR. */
 	void OnResetVR();
@@ -158,14 +175,6 @@ protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 	// End of APawn interface
-
-	/* 
-	 * Configures input for touchscreen devices if there is a valid touch interface for doing so 
-	 *
-	 * @param	InputComponent	The input component pointer to bind controls to
-	 * @returns true if touch controls were enabled.
-	 */
-	bool EnableTouchscreenMovement(UInputComponent* InputComponent);
 
 public:
 	/** Returns Mesh1P subobject **/

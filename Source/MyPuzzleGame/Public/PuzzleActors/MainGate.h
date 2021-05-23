@@ -10,7 +10,14 @@ UCLASS()
 class MYPUZZLEGAME_API AMainGate : public AActor
 {
 	GENERATED_BODY()
-	
+
+	UPROPERTY(EditDefaultsOnly)
+		UStaticMeshComponent* mainFrame;
+
+	FTimerHandle checkTheKeys;
+
+	TArray<AActor*> targetActors;
+
 public:	
 	// Sets default values for this actor's properties
 	AMainGate();
@@ -23,14 +30,20 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere)
-		uint16 keysGathered;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Unlock Attributes")
+		uint8 keysGathered;
 
-	UPROPERTY(EditAnywhere)
-		uint16 totalKeysToUnlock;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Unlock Attributes")
+		int totalKeysToUnlock;
 
-	UPROPERTY(EditAnywhere)
-		bool doorLocked;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Unlock Attributes")
+		bool doorUnLocked;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Meshes")
+		UStaticMeshComponent* mainGate;
 	
+	UFUNCTION()
+		void checkIfUnlocked();
+
 	
 };

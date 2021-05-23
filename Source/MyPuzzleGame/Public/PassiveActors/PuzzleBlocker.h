@@ -5,16 +5,13 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Engine/Engine.h"
-#include "PuzzleProjectile.h"
+#include "PlayersProjectile.h"
 #include "PuzzleBlocker.generated.h"
 
 UCLASS()
 class MYPUZZLEGAME_API APuzzleBlocker : public AActor
 {
 	GENERATED_BODY()
-
-	UPROPERTY(EditDefaultsOnly)
-		UStaticMeshComponent* mainBody;
 	
 public:	
 	// Sets default values for this actor's properties
@@ -26,6 +23,15 @@ protected:
 
 public:	
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	//virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BlockersMesh)
+		UStaticMeshComponent* blockerMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MainAttributes)
+		TEnumAsByte<EPlayersProjectileColor> blockerColor;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MainAttributes)
+		TArray<UMaterialInterface*> blockerColorTable;
 	
 };

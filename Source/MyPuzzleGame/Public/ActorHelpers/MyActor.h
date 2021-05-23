@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "TeleportExit.generated.h"
+#include "MyActor.generated.h"
 
 UCLASS()
-class MYPUZZLEGAME_API ATeleportExit : public AActor
+class MYPUZZLEGAME_API AMyActor : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ATeleportExit();
+	AMyActor();
 
 protected:
 	// Called when the game starts or when spawned
@@ -23,10 +23,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
-		UStaticMeshComponent* vortexMesh;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
-		UStaticMeshComponent* frameMesh;
 	
 };
