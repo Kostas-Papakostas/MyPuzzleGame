@@ -29,4 +29,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
 		UStaticMeshComponent* frameMesh;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Attributes)
+		int id;
 };

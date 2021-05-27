@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/World.h"
+#include "Engine/Engine.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
@@ -34,6 +35,7 @@ ATeleportGate::ATeleportGate()
 	overlapComponent->SetupAttachment(vortexMesh);
 	overlapComponent->OnComponentBeginOverlap.AddDynamic(this, &ATeleportGate::OnOverlap);
 
+	gateID = 0;
 }
 
 // Called when the game starts or when spawned
@@ -59,12 +61,21 @@ void ATeleportGate::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* Other
 	FVector exitForwardVector;
 
 	if (overlappedProjectile) {
-		if (exitGates.Num() > 0) {
-			exitForwardVector = exitGates.operator[](0)->GetActorRightVector();
-						
-			overlappedProjectile->GetProjectileMovement()->Velocity = exitForwardVector.GetSafeNormal()*overlappedProjectile->GetProjectileMovement()->MaxSpeed;
-			teleported = overlappedProjectile->TeleportTo(exitGates.operator[](0)->GetActorLocation(), overlappedProjectile->GetActorRotation());
+
+		for(AActor* myGate:exitGates){
+			if (Cast<ATeleportExit>(myGate)->id == gateID) {
+				exitForwardVector = myGate->GetActorRightVector();
+
+				overlappedProjectile->GetProjectileMovement()->Velocity = exitForwardVector.GetSafeNormal()*overlappedProjectile->GetProjectileMovement()->MaxSpeed;
+				teleported = overlappedProjectile->TeleportTo(myGate->GetActorLocation(), overlappedProjectile->GetActorRotation());
+			}
 		}
+		//if (exitGates.Num() >= 0 && gateID<exitGates.Num()) {
+		//	exitForwardVector = exitGates.operator[](gateID)->GetActorRightVector();
+		//				
+		//	overlappedProjectile->GetProjectileMovement()->Velocity = exitForwardVector.GetSafeNormal()*overlappedProjectile->GetProjectileMovement()->MaxSpeed;
+		//	teleported = overlappedProjectile->TeleportTo(exitGates.operator[](gateID)->GetActorLocation(), overlappedProjectile->GetActorRotation());
+		//}
 	}
 }
 

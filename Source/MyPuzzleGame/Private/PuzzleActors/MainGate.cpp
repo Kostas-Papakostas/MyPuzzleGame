@@ -65,7 +65,8 @@ void AMainGate::checkIfUnlocked() {
 		if (puzzleCharacter)
 			puzzleCharacter->changeMaterial();
 		mainFrame->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
-		mainGate->DestroyComponent();
+		if(mainGate)
+			mainGate->DestroyComponent();
 	}
 }
 

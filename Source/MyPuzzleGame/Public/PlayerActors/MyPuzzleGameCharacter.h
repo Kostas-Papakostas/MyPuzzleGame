@@ -48,7 +48,9 @@ class AMyPuzzleGameCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UMotionControllerComponent* L_MotionController;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool GravityGunOn;
+
 	bool bRotateLeft, bRotateRight;
 	FHitResult Hit;
 	FCollisionQueryParams TraceParams;
@@ -87,6 +89,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
 		UMaterialInterface* FP_Gun_Mat;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Beam)
+		UMaterialInstanceDynamic* Pointer_Material;
 
 	UFUNCTION(BlueprintCallable)
 		bool getGravityGunOn() { return GravityGunOn; }
@@ -122,6 +127,9 @@ public:
 	/** Whether to use motion controller location for aiming. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	uint32 bUsingMotionControllers : 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		class UParticleSystemComponent* pickUpBeam;
 
 protected:
 	

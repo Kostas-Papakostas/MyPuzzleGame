@@ -38,4 +38,7 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, Category = DebugFields)
 		bool teleported = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Mesh)
+		int gateID;
 };

@@ -4,6 +4,7 @@
 #include "MyPuzzleGameProjectile.h"
 #include "PuzzleProjectile.h"
 #include "Components/StaticMeshComponent.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "ProjectileReflector.h"
 #include "Engine/Engine.h"
 #include "Engine/World.h"
@@ -40,7 +41,7 @@ AMyPuzzleGameCharacter::AMyPuzzleGameCharacter()
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
-	distance = 600.f;
+	distance = 300.f;
 
 	// Create a CameraComponent	
 	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
@@ -69,9 +70,12 @@ AMyPuzzleGameCharacter::AMyPuzzleGameCharacter()
 	FP_MuzzleLocation->SetupAttachment(FP_Gun);
 	FP_MuzzleLocation->SetRelativeLocation(FVector(0.2f, 48.4f, -10.6f));
 
+	pickUpBeam = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Pick Up Beam"));
+	pickUpBeam->SetupAttachment(FP_MuzzleLocation);
+
 	GG_MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("CarryObjectLocation"));
 	GG_MuzzleLocation->SetupAttachment(FP_MuzzleLocation);
-	GG_MuzzleLocation->SetRelativeLocation(FVector(0.2f, 230.0f, 32.0f));
+	GG_MuzzleLocation->SetRelativeLocation(FVector(0.2f, 300.f, 32.0f));
 	
 	// Default offset from the character location for projectiles to spawn
 	GunOffset = FVector(100.0f, 0.0f, 10.0f);
@@ -79,30 +83,8 @@ AMyPuzzleGameCharacter::AMyPuzzleGameCharacter()
 	// Note: The ProjectileClass and the skeletal mesh/anim blueprints for Mesh1P, FP_Gun, and VR_Gun 
 	// are set in the derived blueprint asset named MyCharacter to avoid direct content references in C++.
 
-	// Create VR Controllers.
-	R_MotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("R_MotionController"));
-	R_MotionController->MotionSource = FXRMotionControllerBase::RightHandSourceId;
-	R_MotionController->SetupAttachment(RootComponent);
-	L_MotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("L_MotionController"));
-	L_MotionController->SetupAttachment(RootComponent);
-
-	// Create a gun and attach it to the right-hand VR controller.
-	// Create a gun mesh component
-	VR_Gun = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("VR_Gun"));
-	VR_Gun->SetOnlyOwnerSee(true);			// only the owning player will see this mesh
-	VR_Gun->bCastDynamicShadow = false;
-	VR_Gun->CastShadow = false;
-	VR_Gun->SetupAttachment(R_MotionController);
-	VR_Gun->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
-
-	VR_MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("VR_MuzzleLocation"));
-	VR_MuzzleLocation->SetupAttachment(VR_Gun);
-	VR_MuzzleLocation->SetRelativeLocation(FVector(0.000004, 53.999992, 10.000000));
-	VR_MuzzleLocation->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f));		// Counteract the rotation of the VR gun model.
-
-	// Uncomment the following line to turn motion controllers on by default:
-	//bUsingMotionControllers = true;
 }
+
 
 void AMyPuzzleGameCharacter::BeginPlay()
 {
@@ -111,18 +93,8 @@ void AMyPuzzleGameCharacter::BeginPlay()
 
 	//Attach gun mesh component to Skeleton, doing it here because the skeleton is not yet created in the constructor
 	FP_Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
-
-	// Show or hide the two versions of the gun based on whether or not we're using motion controllers.
-	if (bUsingMotionControllers)
-	{
-		VR_Gun->SetHiddenInGame(false, true);
-		Mesh1P->SetHiddenInGame(true, true);
-	}
-	else
-	{
-		VR_Gun->SetHiddenInGame(true, true);
-		Mesh1P->SetHiddenInGame(false, true);
-	}
+	Mesh1P->SetHiddenInGame(false, true);
+	pickUpBeam->SetColorParameter("BaseColor", FLinearColor::Green);
 }
 
 void AMyPuzzleGameCharacter::Tick(float DeltaTime)
@@ -145,6 +117,7 @@ void AMyPuzzleGameCharacter::Tick(float DeltaTime)
 				reflectorActor->mainBody->SetEnableGravity(false);
 				reflectorActor->AttachToComponent(GG_MuzzleLocation, FAttachmentTransformRules::FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, false));
 				reflectorActor->floating = true;
+				pickUpBeam->SetColorParameter("BaseColor", FLinearColor::FLinearColor(1,0,0));
 				AMainReflector* tempReflector = Cast<AMainReflector>(reflectorActor->reflector->GetChildActor());
 				if (tempReflector) {
 					tempReflector->bIsFloating = true;
@@ -354,7 +327,8 @@ void AMyPuzzleGameCharacter::UseGravityGun()
 		endPoint = muzzleLocation + (muzzleForwardVector*distance);
 		GetWorld()->LineTraceSingleByChannel(Hit, muzzleLocation, endPoint, ECollisionChannel::ECC_Visibility, FCollisionQueryParams::DefaultQueryParam);
 		UKismetSystemLibrary::DoesImplementInterface(reflectorActor, IPickupable::UClassType::StaticClass());
-		reflectorActor = dynamic_cast<AProjectileReflector*>(Hit.GetActor());
+		reflectorActor = dynamic_cast<AProjectileReflector*>(Hit.GetActor());		
+		pickUpBeam->SetColorParameter("BaseColor", FLinearColor::FLinearColor(1,0,0));
 	}
 	else {
 		GravityGunOn = false;
@@ -368,6 +342,7 @@ void AMyPuzzleGameCharacter::UseGravityGun()
 			if (tempReflector) {
 				tempReflector->bIsFloating = false;
 			}
+
 			//delete tempReflector;
 		}
 		reflectorActor = NULL;
