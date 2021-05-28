@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "PuzzleActors/PuzzleProjectile.h"
 #include "PlayerActors/PlayersProjectile.h"
+#include "CollisionQueryParams.h"
 #include "ProjectileReflector.h"
 #include "MyPuzzleGameCharacter.generated.h"
 
