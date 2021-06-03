@@ -65,17 +65,12 @@ void ATeleportGate::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* Other
 		for(AActor* myGate:exitGates){
 			if (Cast<ATeleportExit>(myGate)->id == gateID) {
 				exitForwardVector = myGate->GetActorRightVector();
-
+				float tpHeight = this->GetActorLocation().Z - overlappedProjectile->GetActorLocation().Z;
 				overlappedProjectile->GetProjectileMovement()->Velocity = exitForwardVector.GetSafeNormal()*overlappedProjectile->GetProjectileMovement()->MaxSpeed;
-				teleported = overlappedProjectile->TeleportTo(myGate->GetActorLocation(), overlappedProjectile->GetActorRotation());
+				//teleported = overlappedProjectile->TeleportTo(myGate->GetActorLocation(), overlappedProjectile->GetActorRotation());
+				teleported = overlappedProjectile->TeleportTo(FVector::FVector(myGate->GetActorLocation().X, myGate->GetActorLocation().Y, myGate->GetActorLocation().Z-tpHeight), overlappedProjectile->GetActorRotation());
 			}
 		}
-		//if (exitGates.Num() >= 0 && gateID<exitGates.Num()) {
-		//	exitForwardVector = exitGates.operator[](gateID)->GetActorRightVector();
-		//				
-		//	overlappedProjectile->GetProjectileMovement()->Velocity = exitForwardVector.GetSafeNormal()*overlappedProjectile->GetProjectileMovement()->MaxSpeed;
-		//	teleported = overlappedProjectile->TeleportTo(exitGates.operator[](gateID)->GetActorLocation(), overlappedProjectile->GetActorRotation());
-		//}
 	}
 }
 

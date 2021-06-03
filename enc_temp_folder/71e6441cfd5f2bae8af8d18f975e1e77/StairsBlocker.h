@@ -6,8 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "StairsBlocker.generated.h"
 
-
-/*NOT USED YET, MAY NOT BE USED*/
 UCLASS()
 class MYPUZZLEGAME_API AStairsBlocker : public AActor
 {

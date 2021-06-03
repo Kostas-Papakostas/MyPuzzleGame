@@ -22,6 +22,8 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 		TArray<UMaterialInterface*> innerMeshMaterials;
 
+	FTimerHandle checkResetKey;
+
 public:	
 	// Sets default values for this actor's properties
 	APuzzleProjectileTarget();
@@ -48,5 +50,8 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 		int keys;
+
+	UFUNCTION()
+		void resetBallHit();
 
 };

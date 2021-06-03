@@ -18,6 +18,7 @@ AMainReflector::AMainReflector()
 	mainMesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
 	mainMesh->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
 	mainMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+	RootComponent = mainMesh;
 
 }
 

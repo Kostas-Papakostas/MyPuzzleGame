@@ -12,11 +12,12 @@ ATeleportExit::ATeleportExit()
 	frameMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Frame"));
 	frameMesh->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 	frameMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	RootComponent=frameMesh;
 
 	vortexMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Vortex"));
 	vortexMesh->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 	vortexMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
-
+	vortexMesh->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned

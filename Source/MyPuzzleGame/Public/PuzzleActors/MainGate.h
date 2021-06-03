@@ -31,7 +31,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Unlock Attributes")
-		uint8 keysGathered;
+		int keysGathered;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Unlock Attributes")
 		int totalKeysToUnlock;

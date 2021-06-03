@@ -4,6 +4,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
+#include "Engine.h"
 #include "MainGate.h"
 
 // Sets default values
@@ -38,6 +39,9 @@ void APuzzleProjectileTarget::BeginPlay()
 		outerTargetMesh->SetMaterial(0, outerMeshMaterials.operator[](color));
 		innerTargetMesh->SetMaterial(0, innerMeshMaterials.operator[](color));
 	}
+
+	UWorld* const World = GetWorld();
+	World->GetTimerManager().SetTimer(checkResetKey, this, &APuzzleProjectileTarget::resetBallHit, 5.f, true);
 }
 
 // Called every frame
@@ -61,5 +65,11 @@ void APuzzleProjectileTarget::OnHit(UPrimitiveComponent * HitComp, AActor * Othe
 		}
 	}
 
+}
+
+void APuzzleProjectileTarget::resetBallHit()
+{
+	keys = 0;
+	noMoreKeys = false;
 }
 
