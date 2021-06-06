@@ -4,8 +4,7 @@
 #include "Engine/Engine.h"
 #include "Components/StaticMeshComponent.h"
 
-
-
+/*main reflect surface the projectile can bounce*/
 // Sets default values
 AMainReflector::AMainReflector()
 {
@@ -33,9 +32,6 @@ void AMainReflector::BeginPlay()
 void AMainReflector::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (GEngine) {
-		GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Yellow, TEXT("I'M HERE 2"));
-	}
 
 	if (bIsFloating)
 		mainMesh->SetMaterial(0, mainMeshFloatingMat);

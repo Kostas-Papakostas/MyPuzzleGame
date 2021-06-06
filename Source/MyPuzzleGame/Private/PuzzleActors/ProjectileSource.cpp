@@ -39,7 +39,7 @@ void AProjectileSource::BeginPlay()
 		mainBody->SetMaterial(0, bodyMaterial);
 		spawnPointMesh->SetMaterial(0, spawnEdgeMaterials.operator[](spawnMaterial));
 	}
-
+	/*sets a timer to spawn a projectile every x seconds*/
 	GetWorld()->GetTimerManager().SetTimer(timerShootingProjectile, this, &AProjectileSource::SpawnBall, 2.f, true);
 }
 

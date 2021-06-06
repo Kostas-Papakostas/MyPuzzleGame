@@ -2,7 +2,7 @@
 
 #include "StairsBlocker.h"
 
-
+/*NOT USED YET*/
 // Sets default values
 AStairsBlocker::AStairsBlocker()
 {

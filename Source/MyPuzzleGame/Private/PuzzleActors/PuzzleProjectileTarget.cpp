@@ -7,6 +7,7 @@
 #include "Engine.h"
 #include "MainGate.h"
 
+/*the target each projectile should reach*/
 // Sets default values
 APuzzleProjectileTarget::APuzzleProjectileTarget()
 {
@@ -26,10 +27,7 @@ APuzzleProjectileTarget::APuzzleProjectileTarget()
 	innerTargetMesh->SetupAttachment(outerTargetMesh);
 	innerTargetMesh->OnComponentHit.AddDynamic(this, &APuzzleProjectileTarget::OnHit);
 
-
 }
-
-
 
 // Called when the game starts or when spawned
 void APuzzleProjectileTarget::BeginPlay()
@@ -40,6 +38,7 @@ void APuzzleProjectileTarget::BeginPlay()
 		innerTargetMesh->SetMaterial(0, innerMeshMaterials.operator[](color));
 	}
 
+	/*set the timer to reset the key*/
 	UWorld* const World = GetWorld();
 	World->GetTimerManager().SetTimer(checkResetKey, this, &APuzzleProjectileTarget::resetBallHit, 5.f, true);
 }
@@ -53,6 +52,7 @@ void APuzzleProjectileTarget::Tick(float DeltaTime)
 
 void APuzzleProjectileTarget::OnHit(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
 {
+	/*checks if a projectile hits the target*/
 	UWorld* const  World = GetWorld();
 	if (OtherActor) {
 		APuzzleProjectile* tempP = Cast<APuzzleProjectile>(OtherActor);

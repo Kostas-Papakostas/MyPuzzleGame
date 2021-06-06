@@ -36,6 +36,8 @@ void AMainGate::BeginPlay()
 	totalKeysToUnlock = targetActors.Num();
 	if(GEngine)
 		GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Red, FString::FromInt(totalKeysToUnlock));
+
+	/*sets timer to check if all keys unlocked, it checks every x seconds*/
 	GetWorld()->GetTimerManager().SetTimer(checkTheKeys, this, &AMainGate::checkIfUnlocked, 2.f, true);
 }
 
@@ -59,7 +61,7 @@ void AMainGate::checkIfUnlocked() {
 		keysGathered = 0;
 
 	if (doorUnLocked) {
-		//TODO something
+		/*if door gets unlocked destroy the main mesh */
 		ACharacter* myCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 		AMyPuzzleGameCharacter* puzzleCharacter = Cast<AMyPuzzleGameCharacter>(myCharacter);
 		if (puzzleCharacter)

@@ -6,6 +6,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "PuzzleBlocker.h"
 
+/*THE PROJECTILE A PLAYER SHOOT*/
 // Sets default values
 APlayersProjectile::APlayersProjectile()
 {
@@ -55,24 +56,4 @@ void APlayersProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 			this->Destroy();
 		}
 	}
-
-	//COMMENTED OUT WE MAY NOT NEED9 PHYSICS HERE
-	// Only add impulse and destroy projectile if we hit a physics
-	//if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp!=NULL) && OtherComp->IsSimulatingPhysics())
-	//{
-	//	AMainReflector* tempR = Cast<AMainReflector>(OtherActor);
-	//	if (tempR) {
-	//		castOrigin = Hit.ImpactPoint;
-	//		//castDirection = GetVelocity().MirrorByVector(Hit.ImpactNormal);
-	//		castDirection = GetActorForwardVector().MirrorByVector(Hit.ImpactNormal).GetSafeNormal();
-
-	//		OtherComp->AddImpulseAtLocation(castDirection * ProjectileMovement->MaxSpeed, GetActorLocation());
-
-	//		castDirection = GetVelocity().MirrorByVector(Hit.ImpactNormal);
-
-	//		//OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
-	//	}
-	//	else
-	//		this->Destroy();
-	//}
 }

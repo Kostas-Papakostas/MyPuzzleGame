@@ -61,7 +61,7 @@ void ATeleportGate::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* Other
 	FVector exitForwardVector;
 
 	if (overlappedProjectile) {
-
+		/*if the overlap object is a projectile then teleport to the corresponding gate*/
 		for(AActor* myGate:exitGates){
 			if (Cast<ATeleportExit>(myGate)->id == gateID) {
 				exitForwardVector = myGate->GetActorRightVector();

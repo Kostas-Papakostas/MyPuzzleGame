@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "PuzzleProjectile.h"
 #include "Interfaces/Pickupable.h"
 #include "ProjectileReflector.generated.h"
 
@@ -20,15 +21,23 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 public:
+
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interface")
 	void gyroscopicRotation();
 	virtual void gyroscopicRotation_Implementation();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Category = "Lock Points"))
 		bool floating;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (Category = "Object Location"))
+		FVector initialLocation;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (Category = "Object Location"))
+		FRotator currentRotation;
 
 	UFUNCTION()
 		void OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

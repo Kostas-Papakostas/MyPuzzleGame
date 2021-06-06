@@ -80,9 +80,6 @@ AMyPuzzleGameCharacter::AMyPuzzleGameCharacter()
 	// Default offset from the character location for projectiles to spawn
 	GunOffset = FVector(100.0f, 0.0f, 10.0f);
 
-	// Note: The ProjectileClass and the skeletal mesh/anim blueprints for Mesh1P, FP_Gun, and VR_Gun 
-	// are set in the derived blueprint asset named MyCharacter to avoid direct content references in C++.
-
 }
 
 
@@ -103,18 +100,23 @@ void AMyPuzzleGameCharacter::Tick(float DeltaTime)
 	muzzleForwardVector = FP_MuzzleLocation->GetRightVector();
 	endPoint = muzzleLocation + (muzzleForwardVector*distance);
 	
-	if (GravityGunOn) {
-		DrawDebugLine(GetWorld(), muzzleLocation, endPoint, FColor::Blue, false, 2.0f);
+	if (GravityGunOn) {/*indicates if we pressed the action button */
+
+		//debug lines(works only on development and debug builds)
+		//DrawDebugLine(GetWorld(), muzzleLocation, endPoint, FColor::Blue, false, 2.0f);
 		
-		if(Hit.bBlockingHit)
-			DrawDebugPoint(GetWorld(), Hit.ImpactPoint, 5.0f, FColor::Red, true);
+		//debug points(works only on development and debug builds)
+		//if(Hit.bBlockingHit)
+			//DrawDebugPoint(GetWorld(), Hit.ImpactPoint, 5.0f, FColor::Red, true);
 
 		if (reflectorActor) {
-			
 			IPickupable* pickableActor = dynamic_cast<IPickupable*>(reflectorActor);
-			if (pickableActor) {
+			if (pickableActor) {/*if the object inherits from IPickupable is able to be picked up*/
+				/*if object got picked up any physics stuff
+				got disabled to be attached and moved around*/
 				reflectorActor->mainBody->SetSimulatePhysics(false);
 				reflectorActor->mainBody->SetEnableGravity(false);
+				/*attach to custom location*/
 				reflectorActor->AttachToComponent(GG_MuzzleLocation, FAttachmentTransformRules::FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, false));
 				reflectorActor->floating = true;
 				pickUpBeam->SetColorParameter("BaseColor", FLinearColor::FLinearColor(1,0,0));
@@ -190,32 +192,23 @@ void AMyPuzzleGameCharacter::OnBlackFire()
 		UWorld* const World = GetWorld();
 		if (World != NULL)
 		{
-			if (bUsingMotionControllers)
-			{
-				const FRotator SpawnRotation = VR_MuzzleLocation->GetComponentRotation();
-				const FVector SpawnLocation = VR_MuzzleLocation->GetComponentLocation();
-				World->SpawnActor<APlayersProjectile>(blackProjectileClass, SpawnLocation, SpawnRotation);
+			const FRotator SpawnRotation = GetControlRotation();
+			// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
+			const FVector SpawnLocation = ((FP_MuzzleLocation != nullptr) ? FP_MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
+
+			//Set Spawn Collision Handling Override
+			FActorSpawnParameters ActorSpawnParams;
+			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+
+			// spawn the projectile at the muzzle
+			APlayersProjectile* tempP = World->SpawnActor<APlayersProjectile>(blackProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+			if (tempP) {
+				if (GEngine)
+					GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Red, TEXT("SPAWNED"));
 			}
-			else
-			{
-				const FRotator SpawnRotation = GetControlRotation();
-				// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-				const FVector SpawnLocation = ((FP_MuzzleLocation != nullptr) ? FP_MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
-
-				//Set Spawn Collision Handling Override
-				FActorSpawnParameters ActorSpawnParams;
-				ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-
-				// spawn the projectile at the muzzle
-				APlayersProjectile* tempP = World->SpawnActor<APlayersProjectile>(blackProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
-				if (tempP) {
-					if (GEngine)
-						GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Red, TEXT("SPAWNED"));
-				}
-				else {
-					if (GEngine)
-						GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Red, TEXT("ERROR"));
-				}
+			else {
+				if (GEngine)
+					GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Red, TEXT("ERROR"));
 			}
 		}
 	}else
@@ -249,32 +242,23 @@ void AMyPuzzleGameCharacter::OnWhiteFire()
 		UWorld* const World = GetWorld();
 		if (World != NULL)
 		{
-			if (bUsingMotionControllers)
-			{
-				const FRotator SpawnRotation = VR_MuzzleLocation->GetComponentRotation();
-				const FVector SpawnLocation = VR_MuzzleLocation->GetComponentLocation();
-				World->SpawnActor<APlayersProjectile>(whiteProjectileClass, SpawnLocation, SpawnRotation);
+			const FRotator SpawnRotation = GetControlRotation();
+			// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
+			const FVector SpawnLocation = ((FP_MuzzleLocation != nullptr) ? FP_MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
+
+			//Set Spawn Collision Handling Override
+			FActorSpawnParameters ActorSpawnParams;
+			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+
+			// spawn the projectile at the muzzle
+			APlayersProjectile* tempP = World->SpawnActor<APlayersProjectile>(whiteProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+			if (tempP) {
+				if (GEngine)
+					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("SPAWNED"));
 			}
-			else
-			{
-				const FRotator SpawnRotation = GetControlRotation();
-				// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-				const FVector SpawnLocation = ((FP_MuzzleLocation != nullptr) ? FP_MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
-
-				//Set Spawn Collision Handling Override
-				FActorSpawnParameters ActorSpawnParams;
-				ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-
-				// spawn the projectile at the muzzle
-				APlayersProjectile* tempP = World->SpawnActor<APlayersProjectile>(whiteProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
-				if (tempP) {
-					if (GEngine)
-						GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Red, TEXT("SPAWNED"));
-				}
-				else {
-					if (GEngine)
-						GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Red, TEXT("ERROR"));
-				}
+			else {
+				if (GEngine)
+					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("ERROR"));
 			}
 		}
 	}else
@@ -320,8 +304,9 @@ void AMyPuzzleGameCharacter::MoveRight(float Value)
 
 void AMyPuzzleGameCharacter::UseGravityGun()
 {
-	if (!GravityGunOn) {
+	if (!GravityGunOn) {/*check if we don't use the pick up action*/
 		GravityGunOn = true;
+		/*creates a line from a strating point towards its forward vector by distance units*/
 		muzzleLocation = FP_MuzzleLocation->GetComponentLocation();
 		muzzleForwardVector = FP_MuzzleLocation->GetRightVector();
 		endPoint = muzzleLocation + (muzzleForwardVector*distance);
@@ -332,7 +317,7 @@ void AMyPuzzleGameCharacter::UseGravityGun()
 	}
 	else {
 		GravityGunOn = false;
-		if (reflectorActor) {
+		if (reflectorActor) {/*if pick up action is in use deactivates it*/
 			reflectorActor->mainBody->SetSimulatePhysics(true);
 			reflectorActor->mainBody->SetEnableGravity(true);
 			reflectorActor->mainBody->SetNotifyRigidBodyCollision(false);
@@ -349,6 +334,7 @@ void AMyPuzzleGameCharacter::UseGravityGun()
 	}
 }
 
+/*they are being used to rotate object*/
 void AMyPuzzleGameCharacter::RotateLeft()
 {
 	if (reflectorActor) {

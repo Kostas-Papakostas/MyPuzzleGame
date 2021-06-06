@@ -2,7 +2,7 @@
 
 #include "StairsBlockerDestroyer.h"
 
-
+/*NOT USED YET*/
 // Sets default values
 AStairsBlockerDestroyer::AStairsBlockerDestroyer()
 {

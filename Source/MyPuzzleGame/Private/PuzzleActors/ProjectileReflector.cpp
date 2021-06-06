@@ -2,6 +2,8 @@
 
 #include "ProjectileReflector.h"
 #include "PuzzleProjectile.h"
+#include "Engine.h"
+#include "Engine/World.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/ChildActorComponent.h"
@@ -56,6 +58,7 @@ AProjectileReflector::AProjectileReflector()
 void AProjectileReflector::BeginPlay()
 {
 	Super::BeginPlay();
+	/*some collision and physics settings*/
 	overallBox->SetSimulatePhysics(false);
 	mainBody->SetSimulatePhysics(true);
 	mainBody->SetNotifyRigidBodyCollision(false);
@@ -68,10 +71,15 @@ void AProjectileReflector::BeginPlay()
 
 	mainBody->SetMaterial(0, mainBodyMaterial);
 	bounceArea->SetMaterial(0, bounceAreaMaterial);
+
+	initialLocation = this->GetActorLocation();	
+
 }
 
+/*used to keep yaw and roll steady*/
 void AProjectileReflector::gyroscopicRotation_Implementation()
 {
+	currentRotation = this->GetActorRotation();
 	this->SetActorRotation(FRotator::FRotator(0, this->GetActorRotation().Yaw, 0));
 }
 
@@ -79,7 +87,9 @@ void AProjectileReflector::gyroscopicRotation_Implementation()
 void AProjectileReflector::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	this->SetActorRotation(FRotator::FRotator(0, this->GetActorRotation().Yaw, 0));
+
+	gyroscopicRotation_Implementation();
+	/*if picked up change color*/
 	if (floating) {
 		mainBody->SetMaterial(0, mainBodyFloatingMaterial);
 		bounceArea->SetMaterial(0, bounceAreaFloatingMaterial);
@@ -87,6 +97,10 @@ void AProjectileReflector::Tick(float DeltaTime)
 	else {
 		mainBody->SetMaterial(0, mainBodyMaterial);
 		bounceArea->SetMaterial(0, bounceAreaMaterial);
+	}
+
+	if (this->GetActorLocation().Z <= -200.f) {
+		this->TeleportTo(initialLocation, currentRotation);
 	}
 }
 

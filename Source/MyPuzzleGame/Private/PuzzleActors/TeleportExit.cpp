@@ -3,6 +3,9 @@
 #include "TeleportExit.h"
 #include "Components/StaticMeshComponent.h"
 
+/*the exit of the teleport gate
+**this is where projectile teleports
+*/
 // Sets default values
 ATeleportExit::ATeleportExit()
 {

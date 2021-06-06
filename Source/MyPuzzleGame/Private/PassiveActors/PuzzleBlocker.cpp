@@ -7,7 +7,7 @@
 #include "Engine/World.h"
 #include "TimerManager.h"
 
-
+/*just blocks the projectile*/
 // Sets default values
 APuzzleBlocker::APuzzleBlocker()
 {
@@ -30,11 +30,3 @@ void APuzzleBlocker::BeginPlay()
 		blockerMesh->SetMaterial(0, blockerColorTable.operator[](blockerColor));
 	}
 }
-
-// Called every frame
-//void APuzzleBlocker::Tick(float DeltaTime)
-//{
-//	Super::Tick(DeltaTime);
-//
-//	//GetWorldTimerManager().SetTimer(this, &APuzzleBlocker::SpawnBall, TimeInterval, false);
-//}
