@@ -55,6 +55,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = MainAttributes)
 		TArray<UMaterialInterface*> colorsArray;
 
-	
+	/** Sound play when door unlocked */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		class USoundBase* destroySound;
 	
 };

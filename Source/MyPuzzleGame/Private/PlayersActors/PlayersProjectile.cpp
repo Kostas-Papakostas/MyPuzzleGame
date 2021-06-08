@@ -1,8 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PlayersProjectile.h"
+#include "PlayerActors/MyPuzzleGameCharacter.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "PuzzleBlocker.h"
 
@@ -50,6 +52,11 @@ void APlayersProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 
 		if (tempBlocker && tempBlocker->blockerColor==color) {//if projectile hits none of them then destroy
 			OtherActor->Destroy();
+			// try and play the sound if specified
+			if (destroySound != NULL)
+			{
+				UGameplayStatics::PlaySoundAtLocation(this, destroySound, UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)->GetActorLocation());
+			}
 			this->Destroy();
 		}
 		else {

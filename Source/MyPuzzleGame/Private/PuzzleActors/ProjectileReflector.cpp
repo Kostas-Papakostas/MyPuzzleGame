@@ -4,6 +4,7 @@
 #include "PuzzleProjectile.h"
 #include "Engine.h"
 #include "Engine/World.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/ChildActorComponent.h"
@@ -29,7 +30,9 @@ AProjectileReflector::AProjectileReflector()
 	overallBox->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
 	overallBox->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
 	overallBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	overallBox->SetGenerateOverlapEvents(true);
 	FCollisionResponseContainer newContainer;
+
 	newContainer.SetAllChannels(ECollisionResponse::ECR_Overlap);
 	newContainer.SetResponse(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Block);
 	newContainer.SetResponse(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
@@ -52,6 +55,7 @@ AProjectileReflector::AProjectileReflector()
 	bounceArea->SetupAttachment(RootComponent);
 	reflector->SetupAttachment(RootComponent);
 	overallBox->OnComponentBeginOverlap.AddDynamic(this, &AProjectileReflector::OnOverlap);
+	overallBox->OnComponentEndOverlap.AddDynamic(this, &AProjectileReflector::EndOverlap);
 }
 
 // Called when the game starts or when spawned
@@ -60,14 +64,16 @@ void AProjectileReflector::BeginPlay()
 	Super::BeginPlay();
 	/*some collision and physics settings*/
 	overallBox->SetSimulatePhysics(false);
+	overallBox->SetGenerateOverlapEvents(true);
 	mainBody->SetSimulatePhysics(true);
 	mainBody->SetNotifyRigidBodyCollision(false);
 	mainBody->SetEnableGravity(true);
 	mainBody->BodyInstance.bLockXRotation = true;
 	mainBody->BodyInstance.bLockYRotation = true;
 	mainBody->BodyInstance.bLockZRotation = true;
-	mainBody->SetAngularDamping(5.f);
+	mainBody->SetAngularDamping(50.f);
 	mainBody->SetLinearDamping(5.f);
+	mainBody->BodyInstance.MassScale = 15000;
 
 	mainBody->SetMaterial(0, mainBodyMaterial);
 	bounceArea->SetMaterial(0, bounceAreaMaterial);
@@ -106,8 +112,23 @@ void AProjectileReflector::Tick(float DeltaTime)
 
 void AProjectileReflector::OnOverlap(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
+
+	FString name = UKismetSystemLibrary::GetDisplayName(OtherComp);
+	if (name.Contains("Floor")) {
+		mainBody->SetLinearDamping(150.f);
+		mainBody->SetAngularDamping(150.f);
+	}
 	APuzzleProjectile* projectileToDestroy = Cast<APuzzleProjectile>(OtherActor);
 	if (projectileToDestroy)
 		OtherActor->Destroy();
+}
+
+void AProjectileReflector::EndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	FString name = UKismetSystemLibrary::GetDisplayName(OtherComp);
+	if (name.Contains("Floor")) {
+		mainBody->SetLinearDamping(5.f);
+		mainBody->SetAngularDamping(5.f);
+	}
 }
 

@@ -55,8 +55,14 @@ void AMainGate::checkIfUnlocked() {
 		keysGathered += myTarget->keys;
 	}
 
-	if (keysGathered >= totalKeysToUnlock)
+	if (keysGathered >= totalKeysToUnlock) {
+		// try and play the sound if specified
+		if (unlockSound != NULL)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, unlockSound, UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)->GetActorLocation());
+		}
 		doorUnLocked = true;
+	}
 	else
 		keysGathered = 0;
 

@@ -42,6 +42,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Meshes")
 		UStaticMeshComponent* mainGate;
 	
+	/** Sound play when door unlocked */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		class USoundBase* unlockSound;
+
 	UFUNCTION()
 		void checkIfUnlocked();
 

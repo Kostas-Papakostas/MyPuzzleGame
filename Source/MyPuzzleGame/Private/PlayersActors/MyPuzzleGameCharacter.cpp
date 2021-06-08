@@ -1,7 +1,6 @@
 // Copyright 1998-2018 Epic Games, Inc. All Rights Reserved.
 
 #include "MyPuzzleGameCharacter.h"
-#include "MyPuzzleGameProjectile.h"
 #include "PuzzleProjectile.h"
 #include "Components/StaticMeshComponent.h"
 #include "Particles/ParticleSystemComponent.h"
