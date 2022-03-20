@@ -7,4 +7,3 @@ https://drive.google.com/file/d/1SqxUleSNetJqv9eE-W-fKP_N9RwfVUso/view?usp=shari
 Game, playable on web:
 
 https://cs.uoi.gr/~kpapakostas/
-
