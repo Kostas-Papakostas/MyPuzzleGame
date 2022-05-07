@@ -10,9 +10,8 @@ Game, playable on web:
 
 https://cs.uoi.gr/~kpapakostas/
 
-Gameplay video:
+Gameplay video: https://www.youtube.com/watch?v=HgR6-_W3ZL8</br>
 Goal: Unlock the door to the next stage by unlocking all the locks at the same time, to achieve this player has to lead the balls at the correct locks. If any lock won't get a hit from the correct ball for 5seconds it locks again.
-https://www.youtube.com/watch?v=HgR6-_W3ZL8
 
 # Player Character related code:</br>
 
