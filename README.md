@@ -183,7 +183,8 @@ Projectile class exists under the PuzzleActors folder and it's a simple projecti
 # Main puzzle tools:</br>
 
 Projectile Reflectors are used to reflect the projectile and can be moved by player. The projectile reflectors are using simple collisions to reflect projectile's way.
-[Projectile Reflector](https://github.com/Kostas-Papakostas/MyPuzzleGame/blob/master/Source/MyPuzzleGame/Private/PuzzleActors/ProjectileReflector.cpp)
+[Projectile Reflector](https://github.com/Kostas-Papakostas/MyPuzzleGame/blob/master/Source/MyPuzzleGame/Private/PuzzleActors/ProjectileReflector.cpp)</br>
+[Projectile Reflector Header](https://github.com/Kostas-Papakostas/MyPuzzleGame/blob/master/Source/MyPuzzleGame/Public/PuzzleActors/ProjectileReflector.h)
 
 ```
 AProjectileReflector::AProjectileReflector()
