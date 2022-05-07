@@ -144,6 +144,8 @@ void APlayersProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 
 # Locks, projectiles and projectile sources:</br>
 
+[Puzzle Directory](https://github.com/Kostas-Papakostas/MyPuzzleGame/tree/master/Source/MyPuzzleGame/Public/PuzzleActors)</br>
+
 Projectile source is a simple mesh with a spawn point for the projectile:</br>
 
 ```
