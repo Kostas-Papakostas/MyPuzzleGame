@@ -212,7 +212,7 @@ AProjectileReflector::AProjectileReflector()
 ```
 
 Projectile teleport gates:</br>
-[Teleport Exit](https://github.com/Kostas-Papakostas/MyPuzzleGame/blob/master/Source/MyPuzzleGame/Private/PuzzleActors/TeleportExit.cpp)
+[Teleport Exit](https://github.com/Kostas-Papakostas/MyPuzzleGame/blob/master/Source/MyPuzzleGame/Private/PuzzleActors/TeleportExit.cpp)</br>
 [Teleport Gate](https://github.com/Kostas-Papakostas/MyPuzzleGame/blob/master/Source/MyPuzzleGame/Private/PuzzleActors/TeleportGate.cpp)
 
 ```
@@ -237,4 +237,41 @@ void ATeleportGate::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* Other
 		}
 	}
 }
+```
+
+# Main gate:
+
+```
+//The main functionality is to block the exit, every two seconds the gate checks if all the locks of the level are unlocked.
+
+void AMainGate::checkIfUnlocked() {
+
+	for (AActor* myActor : targetActors) {
+		APuzzleProjectileTarget* myTarget = Cast<APuzzleProjectileTarget>(myActor);
+		keysGathered += myTarget->keys;
+	}
+
+	if (keysGathered >= totalKeysToUnlock) {
+		// try and play the sound if specified
+		if (unlockSound != NULL)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, unlockSound, UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)->GetActorLocation());
+		}
+		doorUnLocked = true;
+	}
+	else
+		keysGathered = 0;
+
+	if (doorUnLocked) {
+		/*if door gets unlocked destroy the main mesh */
+		ACharacter* myCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+		AMyPuzzleGameCharacter* puzzleCharacter = Cast<AMyPuzzleGameCharacter>(myCharacter);
+		if (puzzleCharacter)
+			puzzleCharacter->changeMaterial();
+		mainFrame->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
+		if(mainGate)
+			mainGate->DestroyComponent();
+	}
+}
+
 ```
